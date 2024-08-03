@@ -1,0 +1,8 @@
+numpy
+scipy
+py_vollib
+yfinance
+pandas
+matplotlib
+ttkbootstrap
+parameterized
