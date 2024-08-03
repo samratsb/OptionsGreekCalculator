@@ -3,8 +3,6 @@
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
-
-# Correct import paths
 from src.calculator.options_pricing import OptionCalculator
 
 
@@ -12,7 +10,7 @@ class OptionsGreekCalculator:
     def __init__(self):
         self.root = ttk.Window(themename="superhero")
         self.root.title("Options Greek Calculator")
-        self.root.geometry("650x500")  # Adjusted height for better layout
+        self.root.geometry("650x450")  # Adjusted height for better layout
 
         self.create_widgets()
 
