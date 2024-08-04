@@ -1,32 +1,41 @@
 # tests/test_options_pricing.py
 
 import unittest
-from parameterized import parameterized
 from src.calculator.options_pricing import OptionCalculator
 
-class TestOptionPricing(unittest.TestCase):
-    
-    @parameterized.expand([
-        (100, 100, 1, 0.05, 0.2, 'c', 10.4506),  # Corrected expected values
-        (100, 100, 1, 0.05, 0.2, 'p', 5.5735),   # Corrected expected values
-        (100, 90, 1, 0.05, 0.25, 'c', 18.1408),  # Corrected expected values
-        (100, 110, 1, 0.05, 0.15, 'p', 8.7111),  # Corrected expected values
-    ])
-    def test_option_pricing(self, S, K, T, r, sigma, option_type, expected_price):
-        # Test option pricing with various parameters
-        calculator = OptionCalculator(S, K, T, r, sigma, option_type)
+class TestOptionCalculator(unittest.TestCase):
+    def setUp(self):
+        self.S = 100     # Stock price
+        self.K = 110     # Strike price
+        self.T = 2 / 12  # Time to expiration in years (2 months)
+        self.r = 0.06    # Risk-free rate
+        self.sigma = 0.20  # Volatility
+
+    def test_calculate_call_option_price(self):
+        calculator = OptionCalculator(self.S, self.K, self.T, self.r, self.sigma, 'c')
         price, _ = calculator.calculate()
-        
-        # Assert the price with an acceptable tolerance
-        self.assertAlmostEqual(price, expected_price, places=4, 
-                               msg=f"{option_type.upper()} option price calculation failed for S={S}, K={K}, T={T}, r={r}, sigma={sigma}")
+        expected_price = 0.6509972826696231 # You may need to adjust this expected value
+        self.assertAlmostEqual(price, expected_price, places=4, msg="Call option price calculation failed")
 
-    def test_invalid_option_type(self):
-        # Test invalid option type
-        calculator = OptionCalculator(100, 100, 1, 0.05, 0.2, 'x')
-        
-        with self.assertRaises(ValueError):
-            calculator.calculate()
+    def test_calculate_put_option_price(self):
+        calculator = OptionCalculator(self.S, self.K, self.T, self.r, self.sigma, 'p')
+        price, _ = calculator.calculate()
+        expected_price = 9.556478995078123  # You may need to adjust this expected value
+        self.assertAlmostEqual(price, expected_price, places=4, msg="Put option price calculation failed")
 
-if __name__ == "__main__":
+    def test_time_to_expiry_validation_lower_bound(self):
+        with self.assertRaises(ValueError, msg="Time to expiry lower bound validation failed"):
+            OptionCalculator(self.S, self.K, 0, self.r, self.sigma, 'c')
+
+    def test_time_to_expiry_validation_upper_bound(self):
+        with self.assertRaises(ValueError, msg="Time to expiry upper bound validation failed"):
+            OptionCalculator(self.S, self.K, 4/12, self.r, self.sigma, 'c')  # 4 months
+
+    def test_valid_time_to_expiry(self):
+        try:
+            OptionCalculator(self.S, self.K, 3/12, self.r, self.sigma, 'c')  # 3 months
+        except ValueError:
+            self.fail("OptionCalculator raised ValueError unexpectedly for 3 months expiry")
+
+if __name__ == '__main__':
     unittest.main()

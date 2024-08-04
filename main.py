@@ -2,9 +2,6 @@
 
 from src.gui.gui import OptionsGreekCalculator
 
-def main():
+if __name__ == '__main__':
     app = OptionsGreekCalculator()
-    app.run()  # Use the run method to start the app's main loop
-
-if __name__ == "__main__":
-    main()
+    app.run()

@@ -1,5 +1,6 @@
 # src/gui/gui.py
 
+
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
@@ -30,7 +31,7 @@ class OptionsGreekCalculator:
         self.entry_K = ttk.Entry(self.frame)
         self.entry_K.grid(row=1, column=1, pady=5)
 
-        self.label_T = ttk.Label(self.frame, text="Time to Expiry (T in years):")
+        self.label_T = ttk.Label(self.frame, text="Time to Expiry (T in months):")
         self.label_T.grid(row=2, column=0, pady=5, sticky=W)
         self.entry_T = ttk.Entry(self.frame)
         self.entry_T.grid(row=2, column=1, pady=5)
@@ -63,7 +64,11 @@ class OptionsGreekCalculator:
             # Get user input from entry fields
             S = float(self.entry_S.get())
             K = float(self.entry_K.get())
-            T = float(self.entry_T.get())
+            T_months = float(self.entry_T.get())  # Time to expiry in months
+            if T_months > 3:
+                raise ValueError("Time to expiry cannot be more than 3 months.")
+            T = T_months / 12  # Convert months to years
+
             r = float(self.entry_r.get())
             sigma = float(self.entry_sigma.get())
             option_type = 'c' if self.option_type.get() == "Call" else 'p'
@@ -82,9 +87,10 @@ class OptionsGreekCalculator:
 
             self.output_label.config(text=output)
 
+        except ValueError as ve:
+            Messagebox.show_error(title="Input Error", message=f"Invalid input: {str(ve)}")
         except Exception as e:
-            Messagebox.show_error(title="Error", message=str(e))
+            Messagebox.show_error(title="Error", message=f"An unexpected error occurred: {str(e)}")
 
     def run(self):
-        self.root.mainloop()  # Correctly start the Tkinter main loop
-
+        self.root.mainloop() # Start the tkinter app
