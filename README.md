@@ -88,6 +88,6 @@ To run unit tests for the calculator:
 
 ```bash
 python -m unittest discover tests
-
+```
 
 Please feel free to add contributions!
