@@ -10,10 +10,6 @@ This project provides a calculator for European option pricing and Greeks using 
 - **Greeks Calculation**: Compute the Greeks (Delta, Gamma, Vega, Theta, Rho) for both call and put options.
 - **GUI Interface**: A graphical user interface (GUI) for easy input and calculation.
 
-## Requirements
-
-- listed in `requirements.txt`
-
 ## Installation
 
 1. **Clone the repository:**
@@ -56,10 +52,10 @@ This project provides a calculator for European option pricing and Greeks using 
 
 ## Usage
 
-1. **Run the GUI application:**
+1. **Run the application:**
 
     ```bash
-    python src/gui/gui.py
+    python main.py
     ```
 
 2. **Input the following parameters in the GUI:**
@@ -94,4 +90,4 @@ To run unit tests for the calculator:
 python -m unittest discover tests
 
 
-Please ffeel free to add contributions!
+Please feel free to add contributions!
